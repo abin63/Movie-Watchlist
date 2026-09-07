@@ -168,7 +168,7 @@ section {
 .Intro-details-watchlist {
     margin: 5em;
     font-size: 1.5rem;
-    display: block;
+    display: none;
 }
 
 #intro-watchlist-p {
@@ -192,7 +192,7 @@ section {
 }
 
 .movie-lists-watchlist {
-    display: none;
+    display: block;
 }
 
 .movie-list {
@@ -217,12 +217,16 @@ section {
     font-weight: bold;
 }
 
-#watchlist-add >a {
+.watchlist-add >a, .added-watchlist >a {
     text-decoration: none;
     color: black;
 }
 
-.divider {
+.added-watchlist {
+    display: none;
+}
+
+/* .divider {
     width: 80%;
     height: 0;
     border: 1px solid black;
@@ -232,4 +236,14 @@ hr {
     margin-top: 2em;
     margin-bottom: 1em;
     border-color: #9ca3af;
+} */
+
+.movie-list {
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.movie-list:last-child {
+    border-bottom: none; 
 }
