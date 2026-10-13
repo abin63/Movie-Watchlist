@@ -168,7 +168,7 @@ section {
 .Intro-details-watchlist {
     margin: 5em;
     font-size: 1.5rem;
-    display: none;
+    display: block;
 }
 
 #intro-watchlist-p {
@@ -192,7 +192,7 @@ section {
 }
 
 .movie-lists-watchlist {
-    display: block;
+    display: none;
 }
 
 .movie-list {
