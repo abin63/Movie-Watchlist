@@ -8,6 +8,7 @@ const watchListContainer = document.querySelector(".movie-lists-watchlist")
 
 async function findMovie(query) {
     try {
+        movieLists.innerHTML = ""
         const response = await fetch(`https://www.omdbapi.com/?s=${encodeURIComponent(query)}&apikey=60c36440`)
         const data = await response.json()
 
@@ -50,6 +51,22 @@ async function findMovie(query) {
                     </div>
                 </div> 
             `
+
+            const addBtn = movieEl.querySelector(".watchlist-add")
+            const addedMsg = movieEl.querySelector(".added-watchlist")
+
+            const saved = JSON.parse(localStorage.getItem("watchlist")) || []
+            const alreadySaved = saved.some((item) => item.imdbID === movie.imdbID)
+            addBtn.style.display = alreadySaved ? "none" : "block"
+            addedMsg.style.display = alreadySaved ? "block" : "none"
+
+            addBtn.querySelector("a").addEventListener("click", (e) => {
+                e.preventDefault()
+                addToWatchList(movie)
+                addBtn.style.display = "none"
+                addedMsg.style.display = "block"
+            })
+
             movieLists.appendChild(movieEl)
             movieLists.style.display = "block"
 
@@ -61,11 +78,6 @@ async function findMovie(query) {
     }
 }
 
-searchButton.addEventListener("click", () => {
-    findMovie(searchInput.value)
-    searchInput.value = ""
-    introDetails.style.display = "none"
-})
 
 function addToWatchList(movie) {
 
@@ -82,14 +94,24 @@ function addToWatchList(movie) {
     console.log("Added to watchlist ", movie.Title)
 }
 
+function removeFromWatchlist(imdbID) {
+    const watchList = JSON.parse(localStorage.getItem("watchlist")) || []
+    const updated = watchList.filter((item) => item.imdbID !== imdbID)
+    localStorage.setItem("watchlist", JSON.stringify(updated))
+}
+
 function loadWatchList() {
     const watchList = JSON.parse(localStorage.getItem("watchlist")) || []
+    watchListContainer.innerHTML = ""
 
     if(watchList.length === 0) {
         introDetailsWatchList.style.display = "block"
         watchListContainer.style.display = "none"
         return
     }
+
+    introDetailsWatchList.style.display = "none"
+    watchListContainer.style.display = "block"
 
     watchList.forEach((movie) => {
         const movieEl = document.createElement("div")
@@ -119,8 +141,26 @@ function loadWatchList() {
                 </div>
         `
 
+        movieEl.querySelector("#remove-watchlist a").addEventListener("click", (e) => {
+            e.preventDefault()
+            removeFromWatchlist(movie.imdbID)
+            loadWatchList()
+        })
+
         watchListContainer.appendChild(movieEl)
 
     })
 
+    }
+
+    if(searchButton) {
+        searchButton.addEventListener("click", () => {
+            findMovie(searchInput.value)
+            searchInput.value = ""
+            introDetails.style.display = "none"
+    })
+    }
+
+    if(watchListContainer) {
+        loadWatchList()
     }
